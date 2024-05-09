@@ -1,0 +1,41 @@
+from PIL import Image
+
+def encrypt_image(image_path):
+    image = Image.open(image_path)
+    width, height = image.size
+    encrypted_image = Image.new(image.mode, (width, height))
+
+    for x in range(width):
+        for y in range(height):
+            pixel = image.getpixel((x, y))
+            # Example encryption: swapping pixel values
+            encrypted_pixel = (pixel[2], pixel[1], pixel[0])  # Swap RGB values
+            encrypted_image.putpixel((x, y), encrypted_pixel)
+
+    encrypted_image_path = image_path.split('.')[0] + "_encrypted.png"
+    encrypted_image.save(encrypted_image_path)
+    print("Image encrypted and saved as:", encrypted_image_path)
+
+def decrypt_image(encrypted_image_path):
+    encrypted_image = Image.open(encrypted_image_path)
+    width, height = encrypted_image.size
+    decrypted_image = Image.new(encrypted_image.mode, (width, height))
+
+    for x in range(width):
+        for y in range(height):
+            pixel = encrypted_image.getpixel((x, y))
+            # Example decryption: reversing the pixel manipulation
+            decrypted_pixel = (pixel[2], pixel[1], pixel[0])  # Reverse the swap
+            decrypted_image.putpixel((x, y), decrypted_pixel)
+
+    decrypted_image_path = encrypted_image_path.split('_encrypted')[0] + "_decrypted.png"
+    decrypted_image.save(decrypted_image_path)
+    print("Image decrypted and saved as:", decrypted_image_path)
+
+def main():
+    image_path = input("Enter the path to the image: ")
+    encrypt_image(image_path)
+    decrypt_image(image_path.split('.')[0] + "_encrypted.png")
+
+if __name__ == "__main__":
+    main()
